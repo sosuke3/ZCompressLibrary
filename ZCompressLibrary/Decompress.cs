@@ -15,7 +15,7 @@ namespace ZCompressLibrary
             return std_nintendo_decompress(c_data, start, max_length, Common.D_NINTENDO_C_MODE1);
         }
 
-        static byte[] std_nintendo_decompress(byte[] c_data, int start, int max_length, byte mode)
+        internal static byte[] std_nintendo_decompress(byte[] c_data, int start, int max_length, byte mode)
         {
             List<byte> u_data = new List<byte>();
 
