@@ -34,6 +34,7 @@ namespace ZCompressLibrary
                         int previous_length = piece.length;
                         piece.length += piece.next.length;
                         Array.Resize(ref piece.argument, piece.length);
+                        piece.argument_length = piece.length;
                         Array.Copy(piece.next.argument, 0, piece.argument, previous_length, piece.next.argument_length);
                         piece.next = piece.next.next;
                         continue;

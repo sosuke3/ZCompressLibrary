@@ -120,11 +120,11 @@ namespace ZCompressLibrary
                         ushort offset = 0;
                         if (mode == Common.D_NINTENDO_C_MODE2)
                         {
-                            offset = (ushort)((byte)(c_data[c_data_pos + 1]) | ((byte) (c_data[c_data_pos + 2]) << 8));
+                            offset = (ushort)((ushort)c_data[c_data_pos + 1] | ((ushort)c_data[c_data_pos + 2] << 8));
                         }
                         if (mode == Common.D_NINTENDO_C_MODE1)
                         {
-                            offset = (ushort)((byte)(c_data[c_data_pos + 2]) | ((byte) (c_data[c_data_pos + 1]) << 8));
+                            offset = (ushort)((ushort)c_data[c_data_pos + 2] | ((ushort)c_data[c_data_pos + 1] << 8));
                         }
                         if (offset > u_data_pos)
                         {

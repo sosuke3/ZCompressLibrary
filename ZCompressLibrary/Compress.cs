@@ -296,7 +296,7 @@ namespace ZCompressLibrary
                         if (piece.command == Common.D_CMD_COPY_EXISTING)
                         {
                             piece.argument_length = Common.D_MAX_LENGTH;
-                            int offset = piece.argument[0] + (piece.argument[1] << 8);
+                            int offset = ((ushort)piece.argument[0] | ((ushort)piece.argument[1] << 8));
                             new_piece = new compression_piece(piece.command, length_left, piece.argument, piece.argument_length);
                             if (mode == Common.D_NINTENDO_C_MODE2)
                             {
