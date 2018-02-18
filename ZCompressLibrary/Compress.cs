@@ -8,22 +8,21 @@ namespace ZCompressLibrary
     {
         public static bool std_nintendo_compression_sanity_check { get; set; } = false;
 
-        public static byte[] ALTTPCompressGraphics(byte[] u_data, int start, int length, ref int compressedsize)
+        public static byte[] ALTTPCompressGraphics(byte[] u_data, int start, int length)
         {
-            return std_nintendo_compress(u_data, start, length, Common.D_NINTENDO_C_MODE2, ref compressedsize);
+            return std_nintendo_compress(u_data, start, length, Common.D_NINTENDO_C_MODE2);
         }
 
-        public static byte[] ALTTPCompressOverworld(byte[] u_data, int start, int length, ref int compressedsize)
+        public static byte[] ALTTPCompressOverworld(byte[] u_data, int start, int length)
         {
-            return std_nintendo_compress(u_data, start, length, Common.D_NINTENDO_C_MODE1, ref compressedsize);
+            return std_nintendo_compress(u_data, start, length, Common.D_NINTENDO_C_MODE1);
         }
 
-        internal static byte[] std_nintendo_compress(byte[] u_data, int start, int length, byte mode, ref int compressedsize)
+        internal static byte[] std_nintendo_compress(byte[] u_data, int start, int length, byte mode)
         {
             //throw new NotImplementedException();
             // we will realloc later
             int compressed_size = length + 3;
-            compressedsize = compressed_size;
             byte[] compressed_data = new byte[length + 3]; //(char*)malloc(length + 3); // Worse cas is a copy of the string with extended header (probably should abord if more)
             compression_piece compressed_chain = new compression_piece(1, 1, new byte[] { (byte)'a', (byte)'a' }, 2); //compression_piece* compressed_chain = new_compression_piece(1, 1, "aaa", 2);
             compression_piece compressed_chain_start = compressed_chain; //compression_piece* compressed_chain_start = compressed_chain;
@@ -213,7 +212,6 @@ namespace ZCompressLibrary
                     // We don't call merge copy so we need more space
                     byte[] tmp = new byte[length * 2]; //char* tmp = (char*)malloc(length * 2);
                     compressed_size = create_compression_string(compressed_chain_start.next, tmp, mode); //* compressed_size = create_compression_string(compressed_chain_start->next, tmp, mode);
-                    compressedsize = compressed_size;
 
                     int p;
                     int k = 0;
@@ -248,7 +246,6 @@ namespace ZCompressLibrary
             //}
             //#endif
             compressed_size = create_compression_string(compressed_chain_start.next, compressed_data, mode); //* compressed_size = create_compression_string(compressed_chain_start->next, tmp, mode);
-            compressedsize = compressed_size;
 
             //* compressed_size = create_compression_string(compressed_chain_start->next, compressed_data, mode);
             //free_compression_chain(compressed_chain_start);

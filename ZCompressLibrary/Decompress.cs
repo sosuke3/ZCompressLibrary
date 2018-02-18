@@ -164,7 +164,7 @@ namespace ZCompressLibrary
 
             Array.Resize(ref u_data, u_data_pos);
 
-            compressedsize = c_data_pos + 1;
+            compressedsize = c_data_pos - start;
             return u_data;
         }
     }
