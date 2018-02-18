@@ -6,21 +6,15 @@ namespace ZCompressLibrary
 {
     internal static class fake_mem
     {
-        internal static void memcpy(List<byte> dest, byte[] source, int source_offset, int length)
+
+        internal static void memcpy(byte[] dest, int dest_offset, byte[] source, int source_offset, int length)
         {
             for (int i = 0; i < length; ++i)
             {
-                dest.Add(source[source_offset + i]);
+                dest[dest_offset + i] = source[source_offset + i];
             }
         }
 
-        internal static void memcpy(byte[] dest, byte[] source, int source_offset, int length)
-        {
-            for(int i=0; i< length; ++i)
-            {
-                dest[i] = source[source_offset + i];
-            }
-        }
 
         internal static void memcpy(byte[] dest, int dest_offset, byte[] source, int length)
         {
@@ -30,12 +24,11 @@ namespace ZCompressLibrary
             }
         }
 
-        // this is poorly named
-        internal static void memset(List<byte> dest, byte value, int length)
+        internal static void memset(byte[] dest, int offset, byte value, int length)
         {
             for (int i = 0; i < length; ++i)
             {
-                dest.Add(value);
+                dest[i + offset] = value;
             }
         }
 

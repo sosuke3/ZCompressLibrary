@@ -23,7 +23,8 @@ namespace ZCompressLibrary.Tests
             var bytes = new byte[50];
             r.NextBytes(bytes);
 
-            var compressed = Compress.ALTTPCompressGraphics(bytes, 0, bytes.Length);
+            int compsize = 0;
+            var compressed = Compress.ALTTPCompressGraphics(bytes, 0, bytes.Length, ref compsize);
             Assert.NotNull(compressed);
         }
 
@@ -35,7 +36,8 @@ namespace ZCompressLibrary.Tests
             var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length);
             File.WriteAllBytes("moldormdecomp1.bin", decompressed);
 
-            var compressed = Compress.ALTTPCompressGraphics(decompressed, 0, decompressed.Length);
+            int compsize = 0;
+            var compressed = Compress.ALTTPCompressGraphics(decompressed, 0, decompressed.Length, ref compsize);
             Assert.NotNull(compressed);
             File.WriteAllBytes("moldormrecomp.bin", compressed);
             var decomp2 = Decompress.ALTTPDecompressGraphics(compressed, 0, compressed.Length);

@@ -17,5 +17,7 @@ namespace ZCompressLibrary
 
         internal const int D_MAX_NORMAL_LENGTH = 32;
         internal const int D_MAX_LENGTH = 1024;
+
+        internal const int INITIAL_ALLOC_SIZE = 1024;
     }
 }

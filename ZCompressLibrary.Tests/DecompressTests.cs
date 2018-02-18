@@ -25,6 +25,14 @@ namespace ZCompressLibrary.Tests
         }
 
         [Fact]
+        public void should_decompress_feesh_mode_rom()
+        {
+            var file = File.ReadAllBytes("Feesh_Mode_Patched.sfc");
+
+            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0x08B800, file.Length - 0x08B800);
+        }
+
+        [Fact]
         public void should_decompress_file_ganon1_bin_and_be_same_as_ganon1_gfx()
         {
             var file = File.ReadAllBytes("ganon1.bin");

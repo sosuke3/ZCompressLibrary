@@ -17,7 +17,9 @@ namespace ZCompressLibrary
 
         internal static byte[] std_nintendo_decompress(byte[] c_data, int start, int max_length, byte mode)
         {
-            List<byte> u_data = new List<byte>();
+
+            byte[] u_data = new byte[Common.INITIAL_ALLOC_SIZE];
+            int allocated_memory = Common.INITIAL_ALLOC_SIZE;
 
             byte header;
             int c_data_pos;
@@ -64,6 +66,12 @@ namespace ZCompressLibrary
                     //goto error;
                     throw new Exception("Compression string exceed the max_length specified");
                 }
+                if (u_data_pos + length + 1 > allocated_memory) // Adjust allocated memory
+                {
+                    //s_debug("Memory get reallocated by %d was %d\n", INITIAL_ALLOC_SIZE, allocated_memory);
+                    Array.Resize(ref u_data, allocated_memory + Common.INITIAL_ALLOC_SIZE);
+                    allocated_memory += Common.INITIAL_ALLOC_SIZE;
+                }
 
                 switch (command)
                 {
@@ -76,14 +84,14 @@ namespace ZCompressLibrary
                             throw new Exception(String.Format("A copy command exceed the available data {0} > {1} (max_length specified)\n", c_data_pos + 1 + length, max_offset));
                         }
                         //memcpy(u_data + u_data_pos, c_data + c_data_pos + 1, length);
-                        fake_mem.memcpy(u_data, c_data, c_data_pos + 1, length);
+                        fake_mem.memcpy(u_data, u_data_pos, c_data, c_data_pos + 1, length);
                         c_data_pos += length + 1;
                         break;
                         
                     case Common.D_CMD_BYTE_REPEAT:
                         // Copy the same byte length time
                         //memset(u_data + u_data_pos, c_data[c_data_pos + 1], length);
-                        fake_mem.memset(u_data, c_data[c_data_pos + 1], length);
+                        fake_mem.memset(u_data, u_data_pos, c_data[c_data_pos + 1], length);
                         c_data_pos += 2;
                         break;
                         
@@ -93,12 +101,10 @@ namespace ZCompressLibrary
                         byte b = c_data[c_data_pos + 2];
                         for (int i = 0; i < length; i = i + 2)
                         {
-                            //u_data[u_data_pos + i] = a;
-                            u_data.Add(a);
+                            u_data[u_data_pos + i] = a;
                             if ((i + 1) < length)
                             {
-                                //u_data[u_data_pos + i + 1] = b;
-                                u_data.Add(b);
+                                u_data[u_data_pos + i + 1] = b;
                             }
                         }
                         c_data_pos += 3;
@@ -108,8 +114,7 @@ namespace ZCompressLibrary
                         // Next byte is copied and incremented length time
                         for (int i = 0; i < length; i++)
                         {
-                            //u_data[u_data_pos + i] = (byte)(c_data[c_data_pos + 1] + i);
-                            u_data.Add((byte)(c_data[c_data_pos + 1] + i));
+                            u_data[u_data_pos + i] = (byte)(c_data[c_data_pos + 1] + i);
                         }
                         c_data_pos += 2;
                         break;
@@ -132,9 +137,15 @@ namespace ZCompressLibrary
                             //goto error;
                             throw new Exception(String.Format("Offset for command copy existing is larger than the current position (Offset : {0} | Pos : {1}\n", offset.ToString("X4"), u_data_pos.ToString("X6")));
                         }
+                        if (u_data_pos + length + 1 > allocated_memory) // Adjust allocated memory
+                        {
+                            //s_debug("Memory get reallocated by %d was %d\n", INITIAL_ALLOC_SIZE, allocated_memory);
+                            Array.Resize(ref u_data, allocated_memory + Common.INITIAL_ALLOC_SIZE);
+                            allocated_memory += Common.INITIAL_ALLOC_SIZE;
+                        }
 
                         //memcpy(u_data + u_data_pos, u_data + offset, length);
-                        fake_mem.memcpy(u_data, u_data.ToArray(), offset, length);
+                        fake_mem.memcpy(u_data, u_data_pos, u_data, offset, length);
                         c_data_pos += 3;
                         break;
                         
@@ -151,7 +162,9 @@ namespace ZCompressLibrary
                 header = c_data[c_data_pos];
             }
 
-            return u_data.ToArray();
+            Array.Resize(ref u_data, u_data_pos);
+
+            return u_data;
         }
     }
 }
