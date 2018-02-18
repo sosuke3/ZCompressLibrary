@@ -216,8 +216,8 @@ namespace ZCompressLibrary
                     compressedsize = compressed_size;
 
                     int p;
-                    int k;
-                    byte[] uncomp = Decompress.std_nintendo_decompress(tmp, 0, 0, mode); //char* uncomp = std_nintendo_decompress(tmp, 0, 0, &p, &k, mode);
+                    int k = 0;
+                    byte[] uncomp = Decompress.std_nintendo_decompress(tmp, 0, 0, mode, ref k); //char* uncomp = std_nintendo_decompress(tmp, 0, 0, &p, &k, mode);
                 //# ifdef MY_DEBUG
                     //debug_str = speHexString(uncomp, p);
                     //printf("Compressed data so far : %s\n", debug_str);

@@ -20,16 +20,16 @@ namespace ZCompressLibrary.Tests
         public void should_decompress_file_moldorm_bin()
         {
             var file = File.ReadAllBytes("moldorm.bin");
-
-            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length);
+            int compsize = 0;
+            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length, ref compsize);
         }
 
         [Fact]
         public void should_decompress_feesh_mode_rom()
         {
             var file = File.ReadAllBytes("Feesh_Mode_Patched.sfc");
-
-            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0x08B800, file.Length - 0x08B800);
+            int compsize = 0;
+            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0x08B800, file.Length - 0x08B800, ref compsize);
         }
 
         [Fact]
@@ -37,8 +37,8 @@ namespace ZCompressLibrary.Tests
         {
             var file = File.ReadAllBytes("ganon1.bin");
             var expected = File.ReadAllBytes("ganontest.gfx");
-
-            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length);
+            int compsize = 0;
+            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length, ref compsize);
             int i = 0;
             while(i < expected.Length && i < decompressed.Length)
             {

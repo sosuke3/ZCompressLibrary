@@ -33,14 +33,14 @@ namespace ZCompressLibrary.Tests
         {
             var file = File.ReadAllBytes("moldorm.bin");
 
-            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length);
+            int compsize = 0;
+            var decompressed = Decompress.ALTTPDecompressGraphics(file, 0, file.Length, ref compsize);
             File.WriteAllBytes("moldormdecomp1.bin", decompressed);
 
-            int compsize = 0;
             var compressed = Compress.ALTTPCompressGraphics(decompressed, 0, decompressed.Length, ref compsize);
             Assert.NotNull(compressed);
             File.WriteAllBytes("moldormrecomp.bin", compressed);
-            var decomp2 = Decompress.ALTTPDecompressGraphics(compressed, 0, compressed.Length);
+            var decomp2 = Decompress.ALTTPDecompressGraphics(compressed, 0, compressed.Length, ref compsize);
             Assert.Equal(decompressed, decomp2);
         }
 

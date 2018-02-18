@@ -5,17 +5,17 @@ namespace ZCompressLibrary
 {
     public static class Decompress
     {
-        public static byte[] ALTTPDecompressGraphics(byte[] c_data, int start, int max_length)
+        public static byte[] ALTTPDecompressGraphics(byte[] c_data, int start, int max_length, ref int compressedsize)
         {
-            return std_nintendo_decompress(c_data, start, max_length, Common.D_NINTENDO_C_MODE2);
+            return std_nintendo_decompress(c_data, start, max_length, Common.D_NINTENDO_C_MODE2, ref compressedsize);
         }
 
-        public static byte[] ALTTPDecompressOverworld(byte[] c_data, int start, int max_length)
+        public static byte[] ALTTPDecompressOverworld(byte[] c_data, int start, int max_length, ref int compressedsize)
         {
-            return std_nintendo_decompress(c_data, start, max_length, Common.D_NINTENDO_C_MODE1);
+            return std_nintendo_decompress(c_data, start, max_length, Common.D_NINTENDO_C_MODE1, ref compressedsize);
         }
 
-        internal static byte[] std_nintendo_decompress(byte[] c_data, int start, int max_length, byte mode)
+        internal static byte[] std_nintendo_decompress(byte[] c_data, int start, int max_length, byte mode, ref int compressedsize)
         {
 
             byte[] u_data = new byte[Common.INITIAL_ALLOC_SIZE];
@@ -164,6 +164,7 @@ namespace ZCompressLibrary
 
             Array.Resize(ref u_data, u_data_pos);
 
+            compressedsize = c_data_pos + 1;
             return u_data;
         }
     }
