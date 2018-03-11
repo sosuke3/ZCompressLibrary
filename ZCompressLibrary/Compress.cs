@@ -150,8 +150,8 @@ namespace ZCompressLibrary
                 for (byte cmd_i = 1; cmd_i< 5; cmd_i++)
                 {
                     int cmd_size_taken = data_size_taken[cmd_i];
-                    if (cmd_size_taken > max_win && cmd_size_taken > cmd_size[cmd_i] &&
-                        !(cmd_i == Common.D_CMD_COPY_EXISTING && cmd_size_taken == 3) 
+                    if (cmd_size_taken > max_win && cmd_size_taken > cmd_size[cmd_i]
+                        && !(cmd_i == Common.D_CMD_COPY_EXISTING && cmd_size_taken == 3)
                         // FIXME: Should probably be a
                         // table that say what is even with copy
                         // but all other cmd are 2
@@ -275,7 +275,7 @@ namespace ZCompressLibrary
                         output[pos++] = (byte)((piece.length - 1) & 0x00FF);
                     }
                     else
-                    { 
+                    {
                         //We need to split the command
                         int length_left = piece.length - Common.D_MAX_LENGTH;
                         piece.length = Common.D_MAX_LENGTH;
@@ -318,7 +318,27 @@ namespace ZCompressLibrary
                         continue;
                     }
                 }
-                fake_mem.memcpy(output, pos, piece.argument, piece.argument_length); // memcpy(output + pos, piece.argument, piece.argument_length);
+                //fake_mem.memcpy(output, pos, piece.argument, piece.argument_length); // memcpy(output + pos, piece.argument, piece.argument_length);
+                if (piece.command == Common.D_CMD_COPY_EXISTING)
+                {
+                    byte[] tmp = new byte[2];
+                    if (mode == Common.D_NINTENDO_C_MODE2)
+                    {
+                        tmp[0] = piece.argument[0];
+                        tmp[1] = piece.argument[1];
+                    }
+                    if (mode == Common.D_NINTENDO_C_MODE1)
+                    {
+                        tmp[0] = piece.argument[1];
+                        tmp[1] = piece.argument[0];
+                    }
+                    fake_mem.memcpy(output, pos, tmp, 0, 2);
+                }
+                else
+                {
+                    fake_mem.memcpy(output, pos, piece.argument, piece.argument_length); // memcpy(output + pos, piece->argument, piece->argument_lenght);
+                }
+
                 pos += piece.argument_length;
                 piece = piece.next;
             }
